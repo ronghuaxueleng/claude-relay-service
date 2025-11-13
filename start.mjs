@@ -341,12 +341,17 @@ async function checkEnvironment() {
 
     // 检查前端项目是否存在
     if (existsSync(adminSpaPath)) {
-      // 检查前端依赖
+      // 检查前端依赖（检查关键依赖 vite 是否存在）
       const webNodeModules = join(adminSpaPath, 'node_modules')
-      const needsWebInstall = !existsSync(webNodeModules)
+      const viteExists = existsSync(join(webNodeModules, 'vite'))
+      const needsWebInstall = !existsSync(webNodeModules) || !viteExists
 
       if (needsWebInstall) {
-        log.info('正在安装前端依赖...')
+        if (!viteExists && existsSync(webNodeModules)) {
+          log.warn('检测到前端依赖不完整，重新安装...')
+        } else {
+          log.info('正在安装前端依赖...')
+        }
         console.log() // 空行分隔
 
         try {
