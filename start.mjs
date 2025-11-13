@@ -140,7 +140,7 @@ function runCommand(command, args = [], options = {}) {
 
     const spawnOptions = {
       stdio: 'inherit',
-      shell: isWindows, // Windows 下必须使用 shell
+      shell: true, // 始终使用 shell 以支持 npm 等脚本命令
       windowsHide: true, // Windows 下隐藏子进程窗口
       env: { ...process.env }, // 继承环境变量
       ...options
